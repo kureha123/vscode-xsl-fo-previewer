@@ -1,0 +1,33 @@
+<html>
+<head>
+    <style>
+        body {
+            background-color: gray;
+            padding: 0;
+        }
+
+        .px {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+
+        .py {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    {{#each imageList}}
+    <div class="px py">
+        <img class="w-100" src="data:image/png;base64,{{this}}">
+    </div>
+    {{/each}}
+</body>
+
+</html>
