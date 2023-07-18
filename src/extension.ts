@@ -57,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 
 			updateProc.stderr.on("data", function (data: Buffer) {
+				panel.webview.html = data.toString();
 				console.debug(data.toString());
 			});
 
