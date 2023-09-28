@@ -25,28 +25,25 @@ export function activate(context: vscode.ExtensionContext) {
 			let interval = vscode.workspace.getConfiguration("foPreviewer").get<number>("interval");
 			let updateProc = childProc.spawn("java", ["-Dfile.encoding=UTF-8", "-jar", 'vscode-fop.jar', foFilePath, interval?.toString() ?? "1000"], { cwd: context.extensionPath + "/fop" });
 
-			let previewList : string[] = [];
 			let bufferList : Buffer[] = [];
 
 			updateProc.stdout.on("data", function (data: Buffer) {
-				let endFileSymbol = '\n'.charCodeAt(0);
-				let endCreateSymbol = '\t'.charCodeAt(0);
-				
 				let start : number = 0;
 				data.forEach(function (value, index, array) {
-					if (value === endFileSymbol) {
-						let last = data.slice(0, index);
+					if (value == 30) {
+						let last = data.slice(start, index);
 						bufferList.push(last);
 						start = index + 1;
-						let result = Buffer.concat(bufferList);
-						previewList.push(result.toString());
+						let response = JSON.parse(Buffer.concat(bufferList).toString());
+						if (response["error"] != null) {
+							panel.webview.html = "<div>" + response["error"] + "</div>";
+						}
+						else {
+							panel.webview.html = createPreview(context.extension.extensionPath + "/web", response["preview_list"]);
+						}
 						bufferList = [];
 					}
-					else if (value === endCreateSymbol) {
-						panel.webview.html = createPreview(context.extension.extensionPath + "/web", previewList);
-						previewList = [];
-					}
-					else if (index === array.length - 1) {
+					else if (index >= array.length - 1 && index > start) {
 						bufferList.push(data.slice(start));
 					}
 				});
@@ -54,11 +51,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 			updateProc.on("close", function () {
 				panel.dispose();
-			});
-
-			updateProc.stderr.on("data", function (data: Buffer) {
-				panel.webview.html = data.toString();
-				console.debug(data.toString());
 			});
 
 			panel.onDidDispose(function () {
