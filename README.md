@@ -1,20 +1,10 @@
-# vscode-xsl-fo-previewer README
+VSCODE用XSL-FOのプレビューを生成する拡張機能
 
-XSL-FOのプレビューを生成する拡張機能
-
-## Features
-
-XSL-FOの生成結果のプレビュー
+## How to use
 
 使用方法
 1. VSCODEの右下の言語モードを「xsl」に変更
 2. 「XSL-FO可視化」を選択すると現在編集中のFOファイルの生成結果をプレビューできる。プレビューはファイルが保存されるたびにリアルタイムで更新される
-
-## Extension Settings
-
-
-## Known Issues
-
 
 ## Release Notes
 
