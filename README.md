@@ -1,3 +1,5 @@
+## Features
+
 VSCODE用XSL-FOのプレビューを生成する拡張機能
 
 ## How to use
